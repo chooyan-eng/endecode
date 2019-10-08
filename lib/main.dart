@@ -1,0 +1,40 @@
+import 'package:ende_code/view/decode.dart';
+import 'package:ende_code/view/encode.dart';
+import 'package:flutter/material.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'エンデコード',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Home(title: 'エンデコード'),
+    );
+  }
+}
+
+class Home extends StatefulWidget {
+  Home({Key key, this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Encode()
+    );
+  }
+}
