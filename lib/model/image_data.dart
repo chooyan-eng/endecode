@@ -79,6 +79,7 @@ class ImageDataProvider {
     List<Map> maps = await db.query(
       ImageData.tableImageData,
       columns: [ImageData.columnId, ImageData.columnTitle, ImageData.columnCreator, ImageData.columnData],
+      orderBy: "${ImageData.columnId} desc",
     );
 
     final result = List<ImageData>();

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:ende_code/widget/component/colors.dart';
+import 'package:ende_code/widget/style/styles.dart';
 import 'package:flutter/material.dart';
 
 class SaveDataDialogBody extends StatefulWidget {
@@ -35,7 +36,7 @@ class _SaveDataDialogBodyState extends State<SaveDataDialogBody> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text("タイトル"),
+            Text("タイトル", style: EndecodeTextStyle.label),
             SizedBox(height: 8),
             Theme(
               data: ThemeData (
@@ -51,7 +52,7 @@ class _SaveDataDialogBodyState extends State<SaveDataDialogBody> {
               ),
             ),
             SizedBox(height: 32),
-            Text("つくったひと"),
+            Text("つくったひと", style: EndecodeTextStyle.label),
             SizedBox(height: 8),
             Theme(
               data: ThemeData (
@@ -83,7 +84,7 @@ class _SaveDataDialogBodyState extends State<SaveDataDialogBody> {
                   borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                child: const Center(child: const Text("保存", style: const TextStyle(fontSize: 20.0), textAlign: TextAlign.center))
+                child: const Center(child: const Text("ほぞん", style: const TextStyle(fontSize: 20.0), textAlign: TextAlign.center))
               ),
             ),
           ],

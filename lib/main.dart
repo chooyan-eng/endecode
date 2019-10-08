@@ -1,6 +1,7 @@
 import 'package:ende_code/model/app_data.dart';
 import 'package:ende_code/view/encode.dart';
 import 'package:ende_code/view/index.dart';
+import 'package:ende_code/widget/component/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,9 +16,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'エンデコード',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: EndecodeColors.blue,
         ),
-        home: Home(title: 'エンデコード'),
+        home: Home(title: 'エンコードとデコードって？'),
       ),
     );
   }
@@ -37,14 +38,14 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title, style: TextStyle(color: Colors.white)),
       ),
       body: Index(),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
           Navigator.push(context, MaterialPageRoute(builder: (context) => Encode()));
         },
-        child: Icon(Icons.add),
+        child: Icon(Icons.add, color: Colors.white,),
       ),
     );
   }

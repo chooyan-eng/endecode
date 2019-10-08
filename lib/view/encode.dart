@@ -135,7 +135,7 @@ class _EncodeState extends State<Encode> {
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                   ),
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: const Center(child: const Text("保存", style: const TextStyle(fontSize: 20.0), textAlign: TextAlign.center))
+                  child: const Center(child: const Text("ほぞん", style: const TextStyle(fontSize: 20.0), textAlign: TextAlign.center))
                 ),
               ),
               SizedBox(height: 32),

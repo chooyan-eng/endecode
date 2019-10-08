@@ -2,8 +2,10 @@ import 'package:ende_code/model/app_data.dart';
 import 'package:ende_code/view/decode.dart';
 import 'package:ende_code/view/encode.dart';
 import 'package:ende_code/widget/component/colors.dart';
+import 'package:ende_code/widget/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 class Index extends StatefulWidget {
   @override
@@ -35,9 +37,9 @@ class _IndexState extends State<Index> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          appData.imageDataList[index].creator.isEmpty ? SizedBox() : Text(appData.imageDataList[index].creator),
+                          appData.imageDataList[index].creator.isEmpty ? SizedBox() : Text(appData.imageDataList[index].creator, style: EndecodeTextStyle.cardCreator,),
                           SizedBox(height: 4),
-                          Text(appData.imageDataList[index].title),
+                          Text(appData.imageDataList[index].title, style: EndecodeTextStyle.cardTitle),
                           SizedBox(height: 8.0),
                           Align(
                             child: Text(appData.imageDataList[index].dataStr, maxLines: 1,),
@@ -54,6 +56,16 @@ class _IndexState extends State<Index> {
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Icon(Icons.edit, color: EndecodeColors.blue,),
+                      ),
+                    ),
+                    SizedBox(width: 4.0),
+                    InkWell(
+                      onTap: () {
+                        Share.share(appData.imageDataList[index].dataStr);
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(Icons.share, color: EndecodeColors.blue,),
                       ),
                     )
                   ],
