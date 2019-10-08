@@ -1,6 +1,8 @@
-import 'package:ende_code/view/decode.dart';
+import 'package:ende_code/model/app_data.dart';
 import 'package:ende_code/view/encode.dart';
+import 'package:ende_code/view/index.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,12 +10,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'エンデコード',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return ChangeNotifierProvider(
+      builder: (context) => AppData(),
+      child: MaterialApp(
+        title: 'エンデコード',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: Home(title: 'エンデコード'),
       ),
-      home: Home(title: 'エンデコード'),
     );
   }
 }
@@ -34,7 +39,13 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Encode()
+      body: Index(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Encode()));
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
