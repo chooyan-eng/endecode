@@ -15,6 +15,11 @@ class Decode extends StatefulWidget {
 class _DecodeState extends State<Decode> {
 
   var _blockList = <List<bool>>[];
+  var _encodedData = "";
+
+  bool get _isCorrect {
+    return _encodedData == widget.imageData.dataStr;
+  }
 
   @override
   void initState() {
@@ -25,10 +30,46 @@ class _DecodeState extends State<Decode> {
     super.initState();
   }
 
-
   void _onChange(int row, int column) {
     setState(() {
       _blockList[row][column] = !_blockList[row][column];
+    });
+
+    _buildEncodedData();
+  }
+
+  void _buildEncodedData() {
+    var result = <int>[];
+    var isWhite = true;
+    var count = 0;
+
+    _blockList.forEach((row) {
+      row.forEach((isSelected) {
+        if (isWhite) {
+          if (isSelected) {
+            result.add(count);
+            count = 1;
+            isWhite = false;
+          } else {
+            count += 1;
+          }
+        } else {
+          if (isSelected) {
+            count += 1;
+          } else {
+            result.add(count);
+            count = 1;
+            isWhite = true;
+          }
+        }
+      });
+      result.add(count);
+      count = 0;
+      isWhite = true;
+    });
+
+    setState(() {
+      _encodedData = result.fold<String>(widget.imageData.cellNum.toString().padLeft(2, '0'), (prev, value) => prev + value.toString().padLeft(2, '0'));
     });
   }
 
@@ -44,6 +85,7 @@ class _DecodeState extends State<Decode> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: <Widget>[
+              _isCorrect ? Text("せいかい！", style: TextStyle(fontSize: 30)) : SizedBox(),
               Wrap(
                 children: widget.imageData.data.map((num) => Padding(padding: const EdgeInsets.all(8.0), child:Text("$num", style: const TextStyle(fontSize: 24.0),))).toList(),
               ),
