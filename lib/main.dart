@@ -42,6 +42,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text(widget.title, style: TextStyle(color: Colors.white)),
       ),
+
       body: Index(),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
@@ -51,6 +52,8 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
+  var _inputData = "";
 
   void showCanvasDialog() {
     showDialog(
@@ -73,6 +76,58 @@ class _HomeState extends State<Home> {
             SimpleDialogOption(child: Text("16", style: EndecodeTextStyle.dialogOption), onPressed: () { navigateToEncode(16); }),
             Container(height: 1, color: EndecodeColors.blue.shade100),
             SimpleDialogOption(child: Text("32", style: EndecodeTextStyle.dialogOption), onPressed: () { navigateToEncode(32); }),
+            Container(height: 2, color: EndecodeColors.blue),
+            Container(
+              color: EndecodeColors.blue.shade50,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text("もらった データは ここに いれてください", style: EndecodeTextStyle.label)
+              ),
+            ),
+            Container(
+              color: EndecodeColors.blue.shade50,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextField(
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.edit),
+                  ),
+                  onChanged: (value) {
+                    setState(() { _inputData = value; });
+                  },
+                ),
+              ),
+            ),
+            Container(
+              color: EndecodeColors.blue.shade50,
+              height: 16,
+            ),
+            Container(
+              color: EndecodeColors.blue.shade50,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: RaisedButton(
+                  onPressed: _save,
+                  disabledTextColor: Colors.white,
+                  textColor: Colors.white,
+                  padding: const EdgeInsets.all(0.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 52,
+                    decoration: BoxDecoration(
+                      color: EndecodeColors.blue,
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: const Center(child: const Text("ほぞん", style: const TextStyle(fontSize: 20.0), textAlign: TextAlign.center))
+                  ),
+                ),
+              ),
+            ),
+            Container(height: 2, color: EndecodeColors.blue),
           ],
         );
       }
@@ -82,5 +137,17 @@ class _HomeState extends State<Home> {
   void navigateToEncode(int cellNum) {
     Navigator.pop(context);
     Navigator.push(context, MaterialPageRoute(builder: (context) => Encode(imageData: ImageData.empty(cellNum))));
+  }
+
+  void _save() {
+    var imageData = ImageData(
+      title: "もらった データ",
+      creator: "",
+      dataStr: _inputData,
+    );
+    ImageDataProvider(Provider.of<AppData>(context).db).insert(imageData).then((data) {
+      Provider.of<AppData>(context).reload();
+      Navigator.pop(context);
+    });
   }
 }
