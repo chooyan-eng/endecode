@@ -17,7 +17,7 @@ class _IndexState extends State<Index> {
   @override
   Widget build(BuildContext context) {
     return Consumer<AppData>(builder: (context, appData, child) =>
-      ListView.builder(
+      appData.imageDataList.isEmpty ? Center(child: Text(" + ボタンで あたらしい えを エンコードしてください")) : ListView.builder(
         itemCount: appData.imageDataList.length,
         itemBuilder: (context, index) =>
           Padding(
