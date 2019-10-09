@@ -44,6 +44,14 @@ class ImageData {
     return map;
   }
 
+  factory ImageData.empty(int cellNum) {
+    return ImageData(
+      dataStr: List<int>.generate(cellNum + 1, (int index) => cellNum).fold<String>("", (prev, value) => prev + value.toString().padLeft(2, '0')),
+      title: "",
+      creator: "",
+    );
+  }
+
   ImageData.fromMap(Map<String, dynamic> map) {
     id = map[columnId];
     title = map[columnTitle];
@@ -67,7 +75,7 @@ class ImageDataProvider {
   Future<ImageData> getChild(int id) async {
     List<Map> maps = await db.query(ImageData.tableImageData,
         columns: [ImageData.columnId, ImageData.columnTitle, ImageData.columnCreator, ImageData.columnData],
-        where: '$ImageData.columnId = ?',
+        where: '${ImageData.columnId} = ?',
         whereArgs: [id]);
     if (maps.length > 0) {
       return ImageData.fromMap(maps.first);
@@ -90,11 +98,11 @@ class ImageDataProvider {
   }
 
   Future<int> delete(int id) async {
-    return await db.delete(ImageData.tableImageData, where: '$ImageData.columnId = ?', whereArgs: [id]);
+    return await db.delete(ImageData.tableImageData, where: '${ImageData.columnId} = ?', whereArgs: [id]);
   }
 
   Future<int> update(ImageData child) async {
     return await db.update(ImageData.tableImageData, child.toMap(),
-        where: '$ImageData.columnId = ?', whereArgs: [child.id]);
+        where: '${ImageData.columnId} = ?', whereArgs: [child.id]);
   }
 }

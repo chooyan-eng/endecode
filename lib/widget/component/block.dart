@@ -22,7 +22,9 @@ class _BlockState extends State<Block> {
     return InkWell(
       onTap: () {
         setState(() { _isSelected = !_isSelected; });
-        widget.onChange(widget.row, widget.column, _isSelected);
+        if (widget.onChange != null) {
+          widget.onChange(widget.row, widget.column, _isSelected);
+        }
       },
       child: Container(
         width: widget.size,

@@ -1,6 +1,6 @@
 import 'package:ende_code/model/app_data.dart';
 import 'package:ende_code/model/image_data.dart';
-import 'package:ende_code/widget/component/block.dart';
+import 'package:ende_code/widget/component/canvas.dart' as view;
 import 'package:ende_code/widget/component/colors.dart';
 import 'package:ende_code/widget/component/save_data_dialog_body.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 class Encode extends StatefulWidget {
 
-  ImageData imageData;
+  final ImageData imageData;
 
   Encode({Key key, this.imageData}) : super(key: key);
 
@@ -31,28 +31,40 @@ class _EncodeState extends State<Encode> {
         return SimpleDialog(
           title: const Text("データの ほぞん"),
           children: <Widget>[
-            SaveDataDialogBody(onSave: (title, creator) {
-              ImageDataProvider(Provider.of<AppData>(context).db).insert(
-                ImageData(
-                  title: title,
-                  creator: creator ?? "",
-                  dataStr: _encodedData.fold<String>("16", (prev, value) => prev + value.toString().padLeft(2, '0')),
-                ),
-              ).then((data) {
-                Provider.of<AppData>(context).reload();
-                Navigator.pop(context);
-              });
-            }),
+            SaveDataDialogBody(
+              imageData: widget.imageData,
+              onSave: (title, creator) {
+                widget.imageData.title = title;
+                widget.imageData.creator = creator ?? "";
+                widget.imageData.dataStr = _encodedData.fold<String>(widget.imageData.cellNum.toString().padLeft(2, '0'), (prev, value) => prev + value.toString().padLeft(2, '0'));
+                if (widget.imageData.id == null) {
+                  ImageDataProvider(Provider.of<AppData>(context).db).insert(widget.imageData).then((data) {
+                    Provider.of<AppData>(context).reload();
+                    Navigator.pop(context);
+                  });
+                } else {
+                  ImageDataProvider(Provider.of<AppData>(context).db).update(widget.imageData).then((data) {
+                    Provider.of<AppData>(context).reload();
+                    Navigator.pop(context);
+                  });
+                }
+              },
+            ),
           ],
         );
       }
     );
   }
 
-  var _blockList = List<int>(16).map((num) =>
-    List<int>(16).map((num) => false).toList()
-  ).toList();
+  var _blockList = [];
 
+  @override
+  void initState() {
+    _blockList= List<int>(widget.imageData.cellNum).map((num) =>
+      List<int>(widget.imageData.cellNum).map((num) => false).toList()
+    ).toList();
+    super.initState();
+  }
   void _onChange(int row, int column, bool isSelected) {
     _blockList[column][row] = isSelected;
     _buildEncodedData();
@@ -95,9 +107,9 @@ class _EncodeState extends State<Encode> {
 
   @override
   Widget build(BuildContext context) {
-    final blockSize = MediaQuery.of(context).size.height > MediaQuery.of(context).size.width ?
-      (MediaQuery.of(context).size.width - 32) / 16 :
-      (MediaQuery.of(context).size.height - 32 - 160) / 16;
+    final canvasSize = MediaQuery.of(context).size.height > MediaQuery.of(context).size.width ?
+      MediaQuery.of(context).size.width - 32 :
+      MediaQuery.of(context).size.height - 32 - 160;
 
     return Scaffold(
       appBar: AppBar(),
@@ -106,13 +118,10 @@ class _EncodeState extends State<Encode> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: <Widget>[
-              Column(
-                children: List<int>.generate(16, (int index) => index).map((column) =>
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List<int>.generate(16, (int index) => index).map((row) => Block(size: blockSize, column: column, row: row, onChange: _onChange,)).toList(),
-                  )
-                ).toList()
+              view.Canvas(
+                width: canvasSize,
+                cellNum: widget.imageData.cellNum,
+                onChange: _onChange,
               ),
               SizedBox(height: 32),
               Wrap(

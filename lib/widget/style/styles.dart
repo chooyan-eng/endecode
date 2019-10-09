@@ -20,4 +20,8 @@ class EndecodeTextStyle {
     color: Colors.black54,
   );
 
+  static const dialogOption = const TextStyle(
+    fontSize: 32,
+    color: Colors.black54,
+  );
 }

@@ -1,4 +1,5 @@
 import 'package:ende_code/model/app_data.dart';
+import 'package:ende_code/model/image_data.dart';
 import 'package:ende_code/view/decode.dart';
 import 'package:ende_code/view/encode.dart';
 import 'package:ende_code/widget/component/colors.dart';
@@ -51,7 +52,7 @@ class _IndexState extends State<Index> {
                     SizedBox(width: 8.0),
                     InkWell(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Encode()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Encode(imageData: ImageData.empty(8))));
                       },
                       child: Padding(
                         padding: EdgeInsets.all(8.0),

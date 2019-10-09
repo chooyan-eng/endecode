@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:ende_code/model/image_data.dart';
 import 'package:ende_code/widget/component/colors.dart';
 import 'package:ende_code/widget/style/styles.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +8,9 @@ import 'package:flutter/material.dart';
 class SaveDataDialogBody extends StatefulWidget {
 
   final Function onSave;
+  @required final ImageData imageData;
 
-  const SaveDataDialogBody({Key key, this.onSave}) : super(key: key);
+  const SaveDataDialogBody({Key key, this.onSave, this.imageData}) : super(key: key);
 
   @override
   _SaveDataDialogBodyState createState() => _SaveDataDialogBodyState();
@@ -19,12 +21,26 @@ class _SaveDataDialogBodyState extends State<SaveDataDialogBody> {
   String _title = "";
   String _creator = "";
 
+  var _titleEditController = TextEditingController();
+  var _creatorEditController = TextEditingController();
+
   bool get _canSave {
     return _title.isNotEmpty;
   }
 
   void _save() {
     widget.onSave(_title, _creator);
+  }
+
+  @override
+  void initState() {
+    _title = widget.imageData.title;
+    _creator = widget.imageData.creator;
+
+    _titleEditController.text = _title;
+    _creatorEditController.text = _creator;
+
+    super.initState();
   }
 
   @override
@@ -43,6 +59,7 @@ class _SaveDataDialogBodyState extends State<SaveDataDialogBody> {
                 primaryColor: EndecodeColors.blue,
               ),
               child: TextField(
+                controller: _titleEditController,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.edit),
                 ),
@@ -59,6 +76,7 @@ class _SaveDataDialogBodyState extends State<SaveDataDialogBody> {
                 primaryColor: EndecodeColors.blue,
               ),
               child: TextField(
+                controller: _creatorEditController,
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.edit),
                 ),
@@ -91,5 +109,12 @@ class _SaveDataDialogBodyState extends State<SaveDataDialogBody> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _titleEditController.dispose();
+    _creatorEditController.dispose();
+    super.dispose();
   }
 }

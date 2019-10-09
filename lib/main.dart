@@ -1,7 +1,9 @@
 import 'package:ende_code/model/app_data.dart';
+import 'package:ende_code/model/image_data.dart';
 import 'package:ende_code/view/encode.dart';
 import 'package:ende_code/view/index.dart';
 import 'package:ende_code/widget/component/colors.dart';
+import 'package:ende_code/widget/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -43,10 +45,42 @@ class _HomeState extends State<Home> {
       body: Index(),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Encode()));
+          showCanvasDialog();
         },
         child: Icon(Icons.add, color: Colors.white,),
       ),
     );
+  }
+
+  void showCanvasDialog() {
+    showDialog(
+      context: context,
+      builder: (buildContext) {
+        return SimpleDialog(
+          title: const Text("えの おおきさ"),
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text("えの おおきさを えらんでください", style: EndecodeTextStyle.label)
+            ),
+            SizedBox(height: 16),
+            SimpleDialogOption(child: Text("2", style: EndecodeTextStyle.dialogOption), onPressed: () { navigateToEncode(2); }),
+            Container(height: 1, color: EndecodeColors.blue.shade100),
+            SimpleDialogOption(child: Text("4", style: EndecodeTextStyle.dialogOption), onPressed: () { navigateToEncode(4); }),
+            Container(height: 1, color: EndecodeColors.blue.shade100),
+            SimpleDialogOption(child: Text("8", style: EndecodeTextStyle.dialogOption), onPressed: () { navigateToEncode(8); }),
+            Container(height: 1, color: EndecodeColors.blue.shade100),
+            SimpleDialogOption(child: Text("16", style: EndecodeTextStyle.dialogOption), onPressed: () { navigateToEncode(16); }),
+            Container(height: 1, color: EndecodeColors.blue.shade100),
+            SimpleDialogOption(child: Text("32", style: EndecodeTextStyle.dialogOption), onPressed: () { navigateToEncode(32); }),
+          ],
+        );
+      }
+    );
+  }
+
+  void navigateToEncode(int cellNum) {
+    Navigator.pop(context);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Encode(imageData: ImageData.empty(cellNum))));
   }
 }
