@@ -52,7 +52,7 @@ class _IndexState extends State<Index> {
                     SizedBox(width: 8.0),
                     InkWell(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Encode(imageData: ImageData.empty(8))));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Encode(imageData: appData.imageDataList[index])));
                       },
                       child: Padding(
                         padding: EdgeInsets.all(8.0),

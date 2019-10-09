@@ -6,8 +6,9 @@ class Block extends StatefulWidget {
   final int row;
   final int column;
   final Function onChange;
+  final isSelected;
 
-  const Block({Key key, this.size, this.row, this.column, this.onChange}) : super(key: key);
+  const Block({Key key, this.size, this.row, this.column, this.onChange, this.isSelected}) : super(key: key);
 
   @override
   _BlockState createState() => _BlockState();
@@ -15,15 +16,12 @@ class Block extends StatefulWidget {
 
 class _BlockState extends State<Block> {
 
-  var _isSelected = false;
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        setState(() { _isSelected = !_isSelected; });
         if (widget.onChange != null) {
-          widget.onChange(widget.row, widget.column, _isSelected);
+          widget.onChange(widget.row, widget.column);
         }
       },
       child: Container(
@@ -31,7 +29,7 @@ class _BlockState extends State<Block> {
         height: widget.size,
         decoration: BoxDecoration(
           border: Border.all(),
-          color: _isSelected ? Colors.black : Colors.transparent,
+          color: widget.isSelected ? Colors.black : Colors.transparent,
         ),
       ),
     );

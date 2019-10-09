@@ -14,6 +14,24 @@ class Decode extends StatefulWidget {
 
 class _DecodeState extends State<Decode> {
 
+  var _blockList = <List<bool>>[];
+
+  @override
+  void initState() {
+    _blockList= List<int>(widget.imageData.cellNum).map((num) =>
+      List<int>(widget.imageData.cellNum).map((num) => false).toList()
+    ).toList();
+
+    super.initState();
+  }
+
+
+  void _onChange(int row, int column) {
+    setState(() {
+      _blockList[row][column] = !_blockList[row][column];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final canvasSize = MediaQuery.of(context).size.height > MediaQuery.of(context).size.width ?
@@ -33,6 +51,8 @@ class _DecodeState extends State<Decode> {
               view.Canvas(
                 width: canvasSize,
                 cellNum: widget.imageData.cellNum,
+                onChange: _onChange,
+                dataSource: _blockList,
               )
             ],
           ),

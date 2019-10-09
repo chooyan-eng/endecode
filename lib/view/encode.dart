@@ -18,6 +18,7 @@ class Encode extends StatefulWidget {
 
 class _EncodeState extends State<Encode> {
 
+  var _imageData;
   var _encodedData = List<int>();
 
   bool get _canSave {
@@ -32,18 +33,19 @@ class _EncodeState extends State<Encode> {
           title: const Text("データの ほぞん"),
           children: <Widget>[
             SaveDataDialogBody(
-              imageData: widget.imageData,
+              imageData: _imageData,
               onSave: (title, creator) {
-                widget.imageData.title = title;
-                widget.imageData.creator = creator ?? "";
-                widget.imageData.dataStr = _encodedData.fold<String>(widget.imageData.cellNum.toString().padLeft(2, '0'), (prev, value) => prev + value.toString().padLeft(2, '0'));
-                if (widget.imageData.id == null) {
-                  ImageDataProvider(Provider.of<AppData>(context).db).insert(widget.imageData).then((data) {
+                _imageData.title = title;
+                _imageData.creator = creator ?? "";
+                _imageData.dataStr = _encodedData.fold<String>(_imageData.cellNum.toString().padLeft(2, '0'), (prev, value) => prev + value.toString().padLeft(2, '0'));
+                if (_imageData.id == null) {
+                  ImageDataProvider(Provider.of<AppData>(context).db).insert(_imageData).then((data) {
+                    _imageData.id = data.id;
                     Provider.of<AppData>(context).reload();
                     Navigator.pop(context);
                   });
                 } else {
-                  ImageDataProvider(Provider.of<AppData>(context).db).update(widget.imageData).then((data) {
+                  ImageDataProvider(Provider.of<AppData>(context).db).update(_imageData).then((data) {
                     Provider.of<AppData>(context).reload();
                     Navigator.pop(context);
                   });
@@ -56,17 +58,48 @@ class _EncodeState extends State<Encode> {
     );
   }
 
-  var _blockList = [];
+  var _blockList = <List<bool>>[];
 
   @override
   void initState() {
-    _blockList= List<int>(widget.imageData.cellNum).map((num) =>
-      List<int>(widget.imageData.cellNum).map((num) => false).toList()
+
+    _imageData = widget.imageData;
+
+    _blockList= List<int>(_imageData.cellNum).map((num) =>
+      List<int>(_imageData.cellNum).map((num) => false).toList()
     ).toList();
+
+    setState(() {
+      drawDots(0, _imageData.data);
+      _buildEncodedData();
+    });
+
     super.initState();
   }
-  void _onChange(int row, int column, bool isSelected) {
-    _blockList[column][row] = isSelected;
+
+  void drawDots(int row, List<int> data) {
+    var total = 0;
+    var isWhite = true;
+    var count = 0;
+
+    for (; total < _imageData.cellNum; count++) {
+      int targetCellCount = data[count];
+      for (var i = 0; i < targetCellCount; i++) {
+        _blockList[row][total + i] = !isWhite;
+      }
+      total += targetCellCount;
+      isWhite = !isWhite;
+    }
+
+    if (count != data.length) {
+      drawDots(row + 1, data.sublist(count));
+    }
+  }
+
+  void _onChange(int row, int column) {
+    setState(() {
+      _blockList[row][column] = !_blockList[row][column];
+    });
     _buildEncodedData();
   }
 
@@ -120,8 +153,9 @@ class _EncodeState extends State<Encode> {
             children: <Widget>[
               view.Canvas(
                 width: canvasSize,
-                cellNum: widget.imageData.cellNum,
+                cellNum: _imageData.cellNum,
                 onChange: _onChange,
+                dataSource: _blockList,
               ),
               SizedBox(height: 32),
               Wrap(
