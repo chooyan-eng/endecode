@@ -3,6 +3,7 @@ import 'package:ende_code/model/image_data.dart';
 import 'package:ende_code/view/decode.dart';
 import 'package:ende_code/view/encode.dart';
 import 'package:ende_code/widget/component/colors.dart';
+import 'package:ende_code/widget/component/simple_message_dialog.dart';
 import 'package:ende_code/widget/style/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +26,22 @@ class _IndexState extends State<Index> {
             child: Card(
               elevation: 3.0,
               child: InkWell(
+                onLongPress: () {
+                  showDialog(
+                    context: context,
+                    builder: (buildContext) {
+                      return SimpleMessageDialog(
+                        title: "データを けしますか？",
+                        message: "データを けしたいときは 「はい」を おしてください。\nデータを そのままにするときは 「キャンセル」を おしてください。",
+                        onPositiveTapped: () {
+                          ImageDataProvider(appData.db).delete(appData.imageDataList[index].id).then((value) {
+                            appData.reload();
+                          });
+                        },
+                      );
+                    }
+                  );
+                },
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => Decode(appData.imageDataList[index])));
                 },

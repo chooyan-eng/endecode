@@ -1,3 +1,4 @@
+import 'package:ende_code/widget/component/colors.dart';
 import 'package:flutter/material.dart';
 
 class SimpleMessageDialog extends StatelessWidget {
@@ -17,8 +18,8 @@ class SimpleMessageDialog extends StatelessWidget {
       title: Text(title),
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(message)
+          padding: const EdgeInsets.all(16.0),
+          child: Text(message, style: TextStyle(fontSize: 16))
         ),
         Padding(
           padding: const EdgeInsets.only(right: 8.0),
@@ -35,7 +36,7 @@ class SimpleMessageDialog extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: Text("キャンセル"),
+                  child: Text("キャンセル", style: TextStyle(fontSize: 18)),
                 ),
               ) : SizedBox(),
               hasPositive ? InkWell(
@@ -47,7 +48,7 @@ class SimpleMessageDialog extends StatelessWidget {
                 },
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(16, 4, 16, 4),
-                  child: Text("OK"),
+                  child: Text("はい", style: TextStyle(fontSize: 18, color: EndecodeColors.blue.shade700)),
                 ),
               ) : SizedBox(),
             ],

@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: EndecodeColors.blue,
         ),
-        home: Home(title: 'エンコードとデコードって？'),
+        home: Home(title: 'エンコードとデコード'),
       ),
     );
   }
@@ -60,11 +60,11 @@ class _HomeState extends State<Home> {
       context: context,
       builder: (buildContext) {
         return SimpleDialog(
-          title: const Text("えの おおきさ"),
+          title: const Text("あたらしく エンコードする"),
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Text("えの おおきさを えらんでください", style: EndecodeTextStyle.label)
+              child: Text("あたらしく えを かくばあいは おおきさを えらんでください", style: EndecodeTextStyle.label)
             ),
             SizedBox(height: 16),
             SimpleDialogOption(child: Text("2", style: EndecodeTextStyle.dialogOption), onPressed: () { navigateToEncode(2); }),
@@ -81,7 +81,7 @@ class _HomeState extends State<Home> {
               color: EndecodeColors.blue.shade50,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Text("もらった データは ここに いれてください", style: EndecodeTextStyle.label)
+                child: Text("もらった データが あるばあいは ここに いれてください", style: EndecodeTextStyle.label)
               ),
             ),
             Container(

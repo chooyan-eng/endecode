@@ -2,6 +2,7 @@ import 'package:ende_code/model/app_data.dart';
 import 'package:ende_code/model/image_data.dart';
 import 'package:ende_code/widget/component/canvas.dart' as view;
 import 'package:ende_code/widget/component/colors.dart';
+import 'package:ende_code/widget/component/data_field.dart';
 import 'package:ende_code/widget/component/save_data_dialog_body.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -145,7 +146,9 @@ class _EncodeState extends State<Encode> {
       MediaQuery.of(context).size.height - 32 - 160;
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("エンコード"),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -158,9 +161,7 @@ class _EncodeState extends State<Encode> {
                 dataSource: _blockList,
               ),
               SizedBox(height: 32),
-              Wrap(
-                children: _encodedData.map((num) => Padding(padding: const EdgeInsets.all(8.0), child:Text("$num", style: const TextStyle(fontSize: 24.0),))).toList(),
-              ),
+              DataField(dataList: _encodedData),
               SizedBox(height: 32),
               RaisedButton(
                 onPressed: _canSave ? _save : null,

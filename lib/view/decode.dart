@@ -1,5 +1,8 @@
 import 'package:ende_code/model/image_data.dart';
 import 'package:ende_code/widget/component/canvas.dart' as view;
+import 'package:ende_code/widget/component/colors.dart';
+import 'package:ende_code/widget/component/data_field.dart';
+import 'package:ende_code/widget/style/styles.dart';
 import 'package:flutter/material.dart';
 
 class Decode extends StatefulWidget {
@@ -79,17 +82,19 @@ class _DecodeState extends State<Decode> {
       MediaQuery.of(context).size.width - 32 :
       MediaQuery.of(context).size.height - 32 - 160;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("デコード"),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              _isCorrect ? Text("せいかい！", style: TextStyle(fontSize: 30)) : SizedBox(),
-              Wrap(
-                children: widget.imageData.data.map((num) => Padding(padding: const EdgeInsets.all(8.0), child:Text("$num", style: const TextStyle(fontSize: 24.0),))).toList(),
-              ),
-              SizedBox(height: 32),
+              _isCorrect ? Padding(padding: EdgeInsets.only(bottom: 32.0), child: Center(child: Text("せいかい！", style: TextStyle(fontSize: 40, color: EndecodeColors.orange)))) : SizedBox(),
+              Text("データ", style: EndecodeTextStyle.label),
+              DataField(dataList: widget.imageData.data),
+              SizedBox(height: 16),
               view.Canvas(
                 width: canvasSize,
                 cellNum: widget.imageData.cellNum,
