@@ -24,4 +24,10 @@ class EndecodeTextStyle {
     fontSize: 32,
     color: Colors.black54,
   );
+
+  static const simpleMessage = const TextStyle(
+    fontSize: 20,
+    color: Colors.black54,
+  );
+
 }

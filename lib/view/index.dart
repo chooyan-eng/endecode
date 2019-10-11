@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:ende_code/model/app_data.dart';
 import 'package:ende_code/model/image_data.dart';
 import 'package:ende_code/view/decode.dart';
@@ -15,6 +17,9 @@ class Index extends StatefulWidget {
 }
 
 class _IndexState extends State<Index> {
+
+  var _canShare = false;
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AppData>(builder: (context, appData, child) =>
@@ -79,7 +84,68 @@ class _IndexState extends State<Index> {
                     SizedBox(width: 4.0),
                     InkWell(
                       onTap: () {
-                        Share.share(appData.imageDataList[index].dataStr);
+                        setState(() {
+                          _canShare = false;
+                        });
+                        var num1 = Random().nextInt(10);
+                        var num2 = Random().nextInt(10);
+                        showDialog(
+                          context: context,
+                          builder: (buildContext) {
+                            return SimpleDialog(
+                              title: Text("おうちのひとに みてもらってね"),
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.all(16),
+                                  child: Text("下の掛け算の答えを入力してください。", style: EndecodeTextStyle.simpleMessage),
+                                ),
+                                Container(
+                                  color: EndecodeColors.orange.shade50,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8),
+                                    child: Center(child: Text("$num1 x $num2", style: EndecodeTextStyle.dialogOption)),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: TextField(
+                                    decoration: InputDecoration(
+                                      prefixIcon: Icon(Icons.edit),
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() { _canShare = value == "${num1 * num2}"; });
+                                    },
+                                  ),
+                                ),
+                                SizedBox(height: 16),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: RaisedButton(
+                                    onPressed: _canShare ? () {
+                                      Share.share(appData.imageDataList[index].dataStr);
+                                    } : null,
+                                    disabledTextColor: Colors.white,
+                                    textColor: Colors.white,
+                                    padding: const EdgeInsets.all(0.0),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                                    ),
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 52,
+                                      decoration: BoxDecoration(
+                                        color: _canShare ? EndecodeColors.blue : Colors.black12,
+                                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                                      ),
+                                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                      child: const Center(child: const Text("シェアする", style: const TextStyle(fontSize: 20.0), textAlign: TextAlign.center))
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                        );
                       },
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
